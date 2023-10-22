@@ -2,7 +2,7 @@ from pytube import Playlist
 import os
 
 # YouTube çalma listesi URL'sini belirtin
-playlist = Playlist("https://www.youtube.com/playlist?list=PLxH0-kg-VEX9T5c4EQn3bgn2DgNxWRkLd")
+playlist = Playlist("youtube_playlist_url")
 
 # MP4 klasörünü oluşturun (eğer yoksa)
 mp4_folder = 'mp4'
