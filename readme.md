@@ -1,6 +1,6 @@
 # readme 
 
-eror converter not working 
+he's alive, HE'S ALİVE
 
 ## dowlander
 
