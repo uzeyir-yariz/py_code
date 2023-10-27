@@ -1,22 +1,38 @@
+from moviepy.editor import *
 import os
-from moviepy.editor import VideoFileClip
 
-mp4_folder = 'mp4'  # MP4 dosyalarının bulunduğu klasör
-mp3_folder = 'mp3'  # Dönüştürülen MP3 dosyalarının kaydedileceği klasör
+def convert_to_mp3(file_path):
+    try:
+        # Get the name of the file without the extension
+        file_name = os.path.splitext(os.path.basename(file_path))[0]
 
-os.makedirs(mp3_folder, exist_ok=True)  # MP3 klasörünü oluştur (eğer yoksa)
+        # Load the video file
+        video = VideoFileClip(file_path)
 
-for mp4_filename in os.listdir(mp4_folder):
-    if mp4_filename.endswith('.mp4'):
-        mp4_path = os.path.join(mp4_folder, mp4_filename)
-        mp3_filename = mp4_filename.split('.')[0] + '.mp3'
-        mp3_path = os.path.join(mp3_folder, mp3_filename)
+        # Convert the video to audio
+        audio = video.audio
 
-        video_clip = VideoFileClip(mp4_path)
+        # Save the audio as an mp3 file
+        audio.write_audiofile(os.path.join('mp3', f'{file_name}.mp3'))
+    except KeyError as e:
+        print(f"An error occurred: {e}")
+        print("This might be due to an invalid or unsupported video file. Please ensure that the video file is valid and in a supported format.")
 
-        # Sadece sesi çıkart ve MP3 dosyasını kaydet
-        audio_clip = video_clip.audio
-        audio_clip.fps = 24
-        audio_clip.write_audiofile(mp3_path)
+def main():
+    # Make sure the 'mp3' folder exists
+    if not os.path.exists('mp3'):
+        os.makedirs('mp3')
 
-print("Dönüştürme işlemi tamamlandı.")
+    # Get the list of all files in the 'mp4' folder
+    files = os.listdir('mp4')
+
+    # Filter out only the mp4 files
+    mp4_files = [file for file in files if file.endswith('.mp4')]
+
+    # Convert each MP4 file to MP3
+    for mp4_file in mp4_files:
+        mp4_path = os.path.join('mp4', mp4_file)
+        convert_to_mp3(mp4_path)
+
+if __name__ == "__main__":
+    main()

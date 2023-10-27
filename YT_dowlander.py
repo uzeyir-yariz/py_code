@@ -1,15 +1,24 @@
-from pytube import Playlist
 import os
+from pytube import Playlist
 
-# YouTube çalma listesi URL'sini belirtin
-playlist = Playlist("youtube_playlist_url")
+def download_playlist(url, output_folder):
+    try:
+        playlist = Playlist(url)
 
-# MP4 klasörünü oluşturun (eğer yoksa)
-mp4_folder = 'mp4'
-os.makedirs(mp4_folder, exist_ok=True)
+        # Oluşturulan çalma listesindeki her bir videoyu indir
+        for video in playlist.videos:
+            video.streams.get_highest_resolution().download(output_path=output_folder)
 
-print("videos count : ", len(playlist.video_urls))
+        print("Çalma listesi indirme tamamlandı.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-for video in playlist.videos:
-    video_stream = video.streams.filter(only_audio=True).first()
-    video_stream.download(output_path=mp4_folder)
+if __name__ == "__main__":
+    user_url = input("YT list URL")
+    playlist_url = user_url  # İndirmek istediğiniz çalma listesinin URL'sini buraya ekleyin
+    output_folder = "mp4"  # İndirilen videoların kaydedileceği klasörü burada belirtin
+
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    download_playlist(playlist_url, output_folder)
